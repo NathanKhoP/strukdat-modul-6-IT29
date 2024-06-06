@@ -1,4 +1,7 @@
-# Repository Final Project Struktur Data dan Pemrograman Berbasis Objek - IT29
+# Repository Final Project - IT29
+
+### Struktur Data dan Pemrograman Berbasis Objek / Data Structures and Object-Oriented Programming
+
 
 ## Anggota
 
