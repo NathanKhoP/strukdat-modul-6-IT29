@@ -192,6 +192,7 @@ void displayTimetable(vector<Course> courseList, vector<Teacher> teacherList, ve
         }
         cout << "-----------------------------\n";
     }
+}
 
 void printMenu() {
     cout << "1. Course Menu\n";
@@ -264,7 +265,7 @@ void printMenu() {
             }
             break;
         case 5:
-            displayTimetable();
+            displayTimetable(vector<Course>(), vector<Teacher>(), vector<Student>(), vector<Room>());
             break;
 
         case 0:
