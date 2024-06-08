@@ -589,6 +589,7 @@ void printMenu() {
 int main() {
     while (true) {
         printMenu();
+        cout << "\n";
     }
     return 0;
 }
