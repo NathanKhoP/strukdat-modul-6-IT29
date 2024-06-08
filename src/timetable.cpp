@@ -260,6 +260,7 @@ void deleteCourse() {
 }
 
 void displayCourse() {
+    cout << "-----------------------------\n";
     for (const auto &course : courseList) {
         cout << "Course Name: " << course.getCourseName() << "\n";
         cout << "Course Code: " << course.getCourseCode() << "\n";
@@ -328,6 +329,7 @@ void deleteTeacher() {
 }
 
 void displayTeacher() {
+    cout << "-----------------------------\n";
     for (const auto &teacher : teacherList) {
         teacher->printDetails();
         cout << "-----------------------------\n";
@@ -387,6 +389,7 @@ void deleteStudent() {
 }
 
 void displayStudent() {
+    cout << "-----------------------------\n";
     for (const auto &student : studentList) {
         student->printDetails();
         cout << "-----------------------------\n";
@@ -445,6 +448,7 @@ void deleteRoom() {
 
 void displayRoom() {
     for (const auto &room : roomList) {
+        cout << "-----------------------------\n";
         cout << "Room Number: " << room->getRoomNumber() << "\n";
         cout << "Capacity: " << room->getCapacity() << "\n";
         cout << "Availability: " << (room->getIsAvailable() ? "Available" : "Not Available") << "\n";
