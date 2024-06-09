@@ -1,58 +1,68 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
+#include <bits/stdc++.h>
 using namespace std;
+
+const string RESET_COLOR = "\033[0m";
+const string RED = "\033[31m";
+const string GREEN = "\033[32m";
+const string YELLOW = "\033[33m";
+const string BLUE = "\033[34m";
+const string MAGENTA = "\033[35m";
+const string CYAN = "\033[36m";
+const string WHITE = "\033[37m";
+
+class Teacher;  
+class Student;
+class Room;    
 
 class Person {
 protected:
     string name;
     string email;
     string phone;
-
 public:
-    Person(const string &name, const string &email, const string &phone)
+    Person(string name, string email, string phone)
         : name(name), email(email), phone(phone) {}
+    virtual void printDetails() const = 0;
 
-    void setName(const string &name) { this->name = name; }
-    void setEmail(const string &email) { this->email = email; }
-    void setPhone(const string &phone) { this->phone = phone; }
-
-    virtual void printDetails() const {
-        cout << "\033[34mName:\033[0m " << name << "\n\033[34mEmail:\033[0m " << email << "\n\033[34mPhone:\033[0m " << phone << endl;
-    }
+    // setter and getter methods
+    void setName(string name) { this->name = name; }
+    void setEmail(string email) { this->email = email; }
+    void setPhone(string phone) { this->phone = phone; }
+    const string& getName() const { return name; }
+    const string& getEmail() const { return email; }
+    const string& getPhone() const { return phone; }
 };
 
 class Teacher : public Person {
 private:
     string teacherID;
-
 public:
-    Teacher(const string &name, const string &email, const string &phone, const string &teacherID)
+    Teacher(string name, string email, string phone, string teacherID)
         : Person(name, email, phone), teacherID(teacherID) {}
 
-    string getTeacherID() const { return teacherID; }
-
     void printDetails() const override {
-        Person::printDetails();
-        cout << "\033[34mTeacher ID:\033[0m " << teacherID << endl;
+        cout << "Teacher Name: " << name << "\n";
+        cout << "Teacher ID: " << teacherID << "\n";
     }
+
+    void setTeacherID(string teacherID) { this->teacherID = teacherID; }
+    const string& getTeacherID() const { return teacherID; }
 };
 
 class Student : public Person {
 private:
     string studentID;
-
 public:
-    Student(const string &name, const string &email, const string &phone, const string &studentID)
+    Student(string name, string email, string phone, string studentID) 
         : Person(name, email, phone), studentID(studentID) {}
 
-    string getStudentID() const { return studentID; }
-
     void printDetails() const override {
-        Person::printDetails();
-        cout << "\033[34mStudent ID:\033[0m " << studentID << endl;
+        cout << "Student Name: " << name << "\n";
+        cout << "Student ID: " << studentID << "\n";
     }
+
+    void setStudentID(string studentID) { this->studentID = studentID; }
+    string getStudentID() const { return studentID; }
 };
 
 class Room {
@@ -60,18 +70,19 @@ private:
     string roomNumber;
     int capacity;
     bool isAvailable;
-
 public:
-    Room(const string &roomNumber, int capacity, bool isAvailable)
-        : roomNumber(roomNumber), capacity(capacity), isAvailable(isAvailable) {}
+    Room(string roomNumber, int capacity, bool isAvailable) {
+        this->roomNumber = roomNumber;
+        this->capacity = capacity;
+        this->isAvailable = isAvailable;
+    }
 
+    void setRoomNumber(string roomNumber) { this->roomNumber = roomNumber; }
+    void setCapacity(int capacity) { this->capacity = capacity; }
+    void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
     string getRoomNumber() const { return roomNumber; }
     int getCapacity() const { return capacity; }
     bool getIsAvailable() const { return isAvailable; }
-
-    void setRoomNumber(const string &roomNumber) { this->roomNumber = roomNumber; }
-    void setCapacity(int capacity) { this->capacity = capacity; }
-    void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
 };
 
 class Course {
@@ -80,393 +91,487 @@ private:
     string courseCode;
     string courseDay;
     string courseTime;
-    Teacher *teacher;
-    vector<Student *> students;
-    Room *room;
-
+    Teacher* teacher;
+    vector<Student*> students;
+    Room* room;
 public:
-    Course(const string &courseName, const string &courseCode, const string &courseDay, const string &courseTime)
-        : courseName(courseName), courseCode(courseCode), courseDay(courseDay), courseTime(courseTime), teacher(nullptr), room(nullptr) {}
+    Course(string courseName, string courseCode, string courseDay, string courseTime, Teacher* teacher, vector<Student*> students, Room* room)
+        : courseName(courseName), courseCode(courseCode), courseDay(courseDay), courseTime(courseTime), teacher(teacher), students(students), room(room) {}
 
-    string getCourseName() const { return courseName; }
-    string getCourseCode() const { return courseCode; }
-    string getCourseDay() const { return courseDay; }
-    string getCourseTime() const { return courseTime; }
+    // setter and getter methods
+    void setCourseName(string courseName) { this->courseName = courseName; }
+    void setCourseCode(string courseCode) { this->courseCode = courseCode; }
+    void setCourseDay(string courseDay) { this->courseDay = courseDay; }
+    void setCourseTime(string courseTime) { this->courseTime = courseTime; }
+    void setTeacher(Teacher* teacher) { this->teacher = teacher; }
+    void setStudents(vector<Student*> students) { this->students = students; }
+    void setRoom(Room* room) { this->room = room; }
 
-    void setCourseName(const string &courseName) { this->courseName = courseName; }
-    void setCourseCode(const string &courseCode) { this->courseCode = courseCode; }
-    void setCourseDay(const string &courseDay) { this->courseDay = courseDay; }
-    void setCourseTime(const string &courseTime) { this->courseTime = courseTime; }
-    void setTeacher(Teacher *teacher) { this->teacher = teacher; }
-    void setRoom(Room *room) { this->room = room; }
+    const string& getCourseName() const { return courseName; }
+    const string& getCourseCode() const { return courseCode; }
+    const string& getCourseDay() const { return courseDay; }
+    const string& getCourseTime() const { return courseTime; }
+    const Teacher* getTeacher() const { return teacher; }
+    const vector<Student*>& getStudents() const { return students; }
+    const Room* getRoom() const { return room; }
+};
 
-    Teacher *getTeacher() const { return teacher; }
-    Room *getRoom() const { return room; }
-    vector<Student *> getStudents() const { return students; }
+vector<Course> courseList;
+vector<Teacher*> teacherList;
+vector<Student*> studentList;
+vector<Room*> roomList;
 
-    void addStudent(Student *student) { students.push_back(student); }
-    void removeStudent(const string &studentID) {
-        for (int i = 0; i < students.size(); ++i) {
-            if (students[i]->getStudentID() == studentID) {
-                students.erase(students.begin() + i);
+void addCourse() {
+    string courseName, courseCode, courseDay, courseTime;
+    cout << CYAN << "Enter Course Name: " << RESET_COLOR;
+    cin >> courseName;
+    cout << CYAN << "Enter Course Code: " << RESET_COLOR;
+    cin >> courseCode;
+    cout << CYAN << "Enter Course Day: " << RESET_COLOR;
+    cin >> courseDay;
+    cout << CYAN << "Enter Course Time: " << RESET_COLOR;
+    cin >> courseTime;
+
+    string teacherID;
+    cout << "Enter Teacher ID: ";
+    cin >> teacherID;
+    Teacher* teacher = nullptr;
+    for (auto &t : teacherList) {
+        if (t->getTeacherID() == teacherID) {
+            teacher = t;
+            break;
+        }
+    }
+
+    vector<Student*> students;
+    string studentID;
+    cout << "Enter Student IDs (end with 'end'): ";
+    while (cin >> studentID && studentID != "end") {
+        for (auto &s : studentList) {
+            if (s->getStudentID() == studentID) {
+                students.push_back(s);
                 break;
             }
         }
     }
-};
 
-vector<Course> courseList;
-vector<Teacher *> teacherList;
-vector<Student *> studentList;
-vector<Room *> roomList;
+    string roomNumber;
+    cout << "Enter Room Number: ";
+    cin >> roomNumber;
+    Room* room = nullptr;
+    for (auto &r : roomList) {
+        if (r->getRoomNumber() == roomNumber) {
+            room = r;
+            break;
+        }
+    }
 
-void addCourse() {
-    string courseName, courseCode, courseDay, courseTime;
-    cout << "\033[36mEnter Course Name:\033[0m ";
-    cin >> courseName;
-    cout << "\033[36mEnter Course Code:\033[0m ";
-    cin >> courseCode;
-    cout << "\033[36mEnter Course Day:\033[0m ";
-    cin >> courseDay;
-    cout << "\033[36mEnter Course Time:\033[0m ";
-    cin >> courseTime;
+    courseList.push_back(Course(courseName, courseCode, courseDay, courseTime, teacher, students, room));
+    cout << GREEN << "Course added successfully." << RESET_COLOR << endl;
 
-    courseList.push_back(Course(courseName, courseCode, courseDay, courseTime));
-    cout << "\033[32mCourse added successfully.\033[0m\n";
 }
 
 void modifyCourse() {
     string courseCode;
-    cout << "\033[36mEnter Course Code to Modify:\033[0m ";
+    cout << CYAN << "Enter Course Code to Modify: " << RESET_COLOR;
     cin >> courseCode;
+
     for (auto &course : courseList) {
         if (course.getCourseCode() == courseCode) {
             string courseName, courseDay, courseTime;
-            cout << "\033[36mEnter new Course Name:\033[0m ";
+            cout << "Enter new Course Name: ";
             cin >> courseName;
-            cout << "\033[36mEnter new Course Day:\033[0m ";
+            cout << "Enter new Course Day: ";
             cin >> courseDay;
-            cout << "\033[36mEnter new Course Time:\033[0m ";
+            cout << "Enter new Course Time: ";
             cin >> courseTime;
             course.setCourseName(courseName);
             course.setCourseDay(courseDay);
             course.setCourseTime(courseTime);
-            cout << "\033[32mCourse modified successfully.\033[0m\n";
+
+            string teacherID;
+            cout << "Enter new Teacher ID: ";
+            cin >> teacherID;
+            Teacher* teacher = nullptr;
+            for (auto &t : teacherList) {
+                if (t->getTeacherID() == teacherID) {
+                    teacher = t;
+                    break;
+                }
+            }
+            course.setTeacher(teacher);
+
+            vector<Student*> students;
+            string studentID;
+            cout << "Enter new Student IDs (end with 'end'): ";
+            while (cin >> studentID && studentID != "end") {
+                for (auto &s : studentList) {
+                    if (s->getStudentID() == studentID) {
+                        students.push_back(s);
+                        break;
+                    }
+                }
+            }
+            course.setStudents(students);
+
+            string roomNumber;
+            cout << "Enter new Room Number: ";
+            cin >> roomNumber;
+            Room* room = nullptr;
+            for (auto &r : roomList) {
+                if (r->getRoomNumber() == roomNumber) {
+                    room = r;
+                    break;
+                }
+            }
+            course.setRoom(room);
+
+            cout << GREEN << "Course modified successfully." << RESET_COLOR << endl;
             return;
         }
     }
-    cout << "\033[31mCourse not found.\033[0m\n";
+    cout << RED << "Course not found." << RESET_COLOR << endl;
 }
 
-void removeCourse() {
+void deleteCourse() {
     string courseCode;
-    cout << "\033[36mEnter Course Code to Remove:\033[0m ";
+    cout << CYAN << "Enter Course Code to Delete: " << RESET_COLOR;
     cin >> courseCode;
-    for (int i = 0; i < courseList.size(); ++i) {
-        if (courseList[i].getCourseCode() == courseCode) {
-            courseList.erase(courseList.begin() + i);
-            cout << "\033[32mCourse removed successfully.\033[0m\n";
-            return;
-        }
+    auto it = std::remove_if(courseList.begin(), courseList.end(),
+        [&courseCode](const Course &course) { return course.getCourseCode() == courseCode; });
+
+    if (it != courseList.end()) {
+        courseList.erase(it, courseList.end());
+        cout << GREEN << "Course deleted successfully." << RESET_COLOR << endl;
+    } else {
+        cout << RED << "Course not found." << RESET_COLOR << endl;
     }
-    cout << "\033[31mCourse not found.\033[0m\n";
+}
+
+void displayCourse() {
+    cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    for (const auto &course : courseList) {
+        cout << BLUE << "Course Name: " << RESET_COLOR << course.getCourseName() << endl;
+        cout << BLUE << "Course Code: " << RESET_COLOR << course.getCourseCode() << endl;
+        cout << BLUE << "Day: " << RESET_COLOR << course.getCourseDay() << endl;
+        cout << BLUE << "Time: " << RESET_COLOR << course.getCourseTime() << endl;
+        cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    }
 }
 
 void addTeacher() {
     string name, email, phone, teacherID;
-    cout << "\033[36mEnter Teacher Name:\033[0m ";
+    cout << CYAN << "Enter Teacher Name: " << RESET_COLOR;
     cin >> name;
-    cout << "\033[36mEnter Teacher Email:\033[0m ";
+    cout << CYAN << "Enter Teacher Email: " << RESET_COLOR;
     cin >> email;
-    cout << "\033[36mEnter Teacher Phone:\033[0m ";
+    cout << CYAN << "Enter Teacher Phone: " << RESET_COLOR;
     cin >> phone;
-    cout << "\033[36mEnter Teacher ID:\033[0m ";
+    cout << CYAN << "Enter Teacher ID: " << RESET_COLOR;
     cin >> teacherID;
-
     teacherList.push_back(new Teacher(name, email, phone, teacherID));
-    cout << "\033[32mTeacher added successfully.\033[0m\n";
+    cout << GREEN << "Teacher added successfully." << RESET_COLOR << endl;
 }
 
 void modifyTeacher() {
     string teacherID;
-    cout << "\033[36mEnter Teacher ID to Modify:\033[0m ";
+    cout << CYAN << "Enter Teacher ID to Modify: " << RESET_COLOR;
     cin >> teacherID;
     for (auto &teacher : teacherList) {
         if (teacher->getTeacherID() == teacherID) {
             string name, email, phone;
-            cout << "\033[36mEnter new Teacher Name:\033[0m ";
+            cout << CYAN << "Enter new Teacher Name: " << RESET_COLOR;
             cin >> name;
-            cout << "\033[36mEnter new Teacher Email:\033[0m ";
+            cout << CYAN << "Enter new Teacher Email: " << RESET_COLOR;
             cin >> email;
-            cout << "\033[36mEnter new Teacher Phone:\033[0m ";
+            cout << CYAN << "Enter new Teacher Phone: " << RESET_COLOR;
             cin >> phone;
             teacher->setName(name);
             teacher->setEmail(email);
             teacher->setPhone(phone);
-            cout << "\033[32mTeacher modified successfully.\033[0m\n";
+            cout << GREEN << "Teacher modified successfully." << RESET_COLOR << endl;
             return;
         }
     }
-    cout << "\033[31mTeacher not found.\033[0m\n";
+    cout << RED << "Teacher not found." << RESET_COLOR << endl;
 }
 
-void removeTeacher() {
+void deleteTeacher() {
     string teacherID;
-    cout << "\033[36mEnter Teacher ID to Remove:\033[0m ";
+    cout << CYAN << "Enter Teacher ID to Delete: " << RESET_COLOR;
     cin >> teacherID;
-    for (int i = 0; i < teacherList.size(); ++i) {
-        if (teacherList[i]->getTeacherID() == teacherID) {
-            teacherList.erase(teacherList.begin() + i);
-            cout << "\033[32mTeacher removed successfully.\033[0m\n";
-            return;
-        }
+    auto it = std::remove_if(teacherList.begin(), teacherList.end(),
+        [&teacherID](Teacher* teacher) { return teacher->getTeacherID() == teacherID; });
+    if (it != teacherList.end()) {
+        teacherList.erase(it, teacherList.end());
+        cout << GREEN << "Teacher deleted successfully." << RESET_COLOR << endl;
+    } else {
+        cout << RED << "Teacher not found." << RESET_COLOR << endl;
     }
-    cout << "\033[31mTeacher not found.\033[0m\n";
+}
+
+void displayTeacher() {
+    cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    for (const auto &teacher : teacherList) {
+        cout << BLUE << "Teacher Details:" << RESET_COLOR << endl;
+        teacher->printDetails();
+        cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    }
 }
 
 void addStudent() {
     string name, email, phone, studentID;
-    cout << "\033[36mEnter Student Name:\033[0m ";
+    cout << CYAN << "Enter Student Name: " << RESET_COLOR;
     cin >> name;
-    cout << "\033[36mEnter Student Email:\033[0m ";
+    cout << CYAN << "Enter Student Email: " << RESET_COLOR;
     cin >> email;
-    cout << "\033[36mEnter Student Phone:\033[0m ";
+    cout << CYAN << "Enter Student Phone: " << RESET_COLOR;
     cin >> phone;
-    cout << "\033[36mEnter Student ID:\033[0m ";
+    cout << CYAN << "Enter Student ID: " << RESET_COLOR;
     cin >> studentID;
-
     studentList.push_back(new Student(name, email, phone, studentID));
-    cout << "\033[32mStudent added successfully.\033[0m\n";
+    cout << GREEN << "Student added successfully." << RESET_COLOR << endl;
 }
 
 void modifyStudent() {
     string studentID;
-    cout << "\033[36mEnter Student ID to Modify:\033[0m ";
+    cout << CYAN << "Enter Student ID to Modify: " << RESET_COLOR;
     cin >> studentID;
     for (auto &student : studentList) {
         if (student->getStudentID() == studentID) {
             string name, email, phone;
-            cout << "\033[36mEnter new Student Name:\033[0m ";
+            cout << CYAN << "Enter new Student Name: " << RESET_COLOR;
             cin >> name;
-            cout << "\033[36mEnter new Student Email:\033[0m ";
+            cout << CYAN << "Enter new Student Email: " << RESET_COLOR;
             cin >> email;
-            cout << "\033[36mEnter new Student Phone:\033[0m ";
+            cout << CYAN << "Enter new Student Phone: " << RESET_COLOR;
             cin >> phone;
             student->setName(name);
             student->setEmail(email);
             student->setPhone(phone);
-            cout << "\033[32mStudent modified successfully.\033[0m\n";
+            cout << GREEN << "Student modified successfully." << RESET_COLOR << endl;
             return;
         }
     }
-    cout << "\033[31mStudent not found.\033[0m\n";
+    cout << RED << "Student not found." << RESET_COLOR << endl;
 }
 
-void removeStudent() {
+void deleteStudent() {
     string studentID;
-    cout << "\033[36mEnter Student ID to Remove:\033[0m ";
+    cout << CYAN << "Enter Student ID to Delete: " << RESET_COLOR;
     cin >> studentID;
-    for (int i = 0; i < studentList.size(); ++i) {
-        if (studentList[i]->getStudentID() == studentID) {
-            studentList.erase(studentList.begin() + i);
-            cout << "\033[32mStudent removed successfully.\033[0m\n";
-            return;
-        }
+    auto it = std::remove_if(studentList.begin(), studentList.end(),
+        [&studentID](Student* student) { return student->getStudentID() == studentID; });
+    if (it != studentList.end()) {
+        studentList.erase(it, studentList.end());
+        cout << GREEN << "Student deleted successfully." << RESET_COLOR << endl;
+    } else {
+        cout << RED << "Student not found." << RESET_COLOR << endl;
     }
-    cout << "\033[31mStudent not found.\033[0m\n";
 }
+
+void displayStudent() {
+    cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    for (const auto &student : studentList) {
+        cout << BLUE << "Student Details:" << RESET_COLOR << endl;
+        student->printDetails();
+        cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    }
+}
+
 
 void addRoom() {
     string roomNumber;
     int capacity;
     bool isAvailable;
-    cout << "\033[36mEnter Room Number:\033[0m ";
+    cout << CYAN << "Enter Room Number: " << RESET_COLOR;
     cin >> roomNumber;
-    cout << "\033[36mEnter Room Capacity:\033[0m ";
+    cout << CYAN << "Enter Room Capacity: " << RESET_COLOR;
     cin >> capacity;
-    cout << "\033[36mIs Room Available (1 for Yes, 0 for No):\033[0m ";
+    cout << CYAN << "Is Room Available (1 for Yes, 0 for No): " << RESET_COLOR;
     cin >> isAvailable;
-
     roomList.push_back(new Room(roomNumber, capacity, isAvailable));
-    cout << "\033[32mRoom added successfully.\033[0m\n";
+    cout << GREEN << "Room added successfully." << RESET_COLOR << endl;
 }
 
 void modifyRoom() {
     string roomNumber;
-    cout << "\033[36mEnter Room Number to Modify:\033[0m ";
+    cout << CYAN << "Enter Room Number to Modify: " << RESET_COLOR;
     cin >> roomNumber;
     for (auto &room : roomList) {
         if (room->getRoomNumber() == roomNumber) {
             int capacity;
             bool isAvailable;
-            cout << "\033[36mEnter new Room Capacity:\033[0m ";
+            cout << CYAN << "Enter new Room Capacity: " << RESET_COLOR;
             cin >> capacity;
-            cout << "\033[36mIs Room Available (1 for Yes, 0 for No):\033[0m ";
+            cout << CYAN << "Is Room Available (1 for Yes, 0 for No): " << RESET_COLOR;
             cin >> isAvailable;
             room->setCapacity(capacity);
             room->setIsAvailable(isAvailable);
-            cout << "\033[32mRoom modified successfully.\033[0m\n";
+            cout << GREEN << "Room modified successfully." << RESET_COLOR << endl;
             return;
         }
     }
-    cout << "\033[31mRoom not found.\033[0m\n";
+    cout << RED << "Room not found." << RESET_COLOR << endl;
 }
 
-void removeRoom() {
+void deleteRoom() {
     string roomNumber;
-    cout << "\033[36mEnter Room Number to Remove:\033[0m ";
+    cout << CYAN << "Enter Room Number to Delete: " << RESET_COLOR;
     cin >> roomNumber;
-    for (int i = 0; i < roomList.size(); ++i) {
-        if (roomList[i]->getRoomNumber() == roomNumber) {
-            roomList.erase(roomList.begin() + i);
-            cout << "\033[32mRoom removed successfully.\033[0m\n";
-            return;
-        }
-    }
-    cout << "\033[31mRoom not found.\033[0m\n";
-}
-
-void printCourses() {
-    for (const auto &course : courseList) {
-        cout << "\033[35mCourse Name:\033[0m " << course.getCourseName()
-             << "\n\033[35mCourse Code:\033[0m " << course.getCourseCode()
-             << "\n\033[35mCourse Day:\033[0m " << course.getCourseDay()
-             << "\n\033[35mCourse Time:\033[0m " << course.getCourseTime() << endl;
-        if (course.getTeacher() != nullptr) {
-            cout << "\033[35mTeacher:\033[0m " << course.getTeacher()->getTeacherID() << endl;
-        }
-        if (course.getRoom() != nullptr) {
-            cout << "\033[35mRoom:\033[0m " << course.getRoom()->getRoomNumber() << endl;
-        }
-        cout << "\033[35mStudents:\033[0m ";
-        for (const auto &student : course.getStudents()) {
-            cout << student->getStudentID() << " ";
-        }
-        cout << "\n---\n";
+    auto it = std::remove_if(roomList.begin(), roomList.end(),
+        [&roomNumber](Room* room) { return room->getRoomNumber() == roomNumber; });
+    if (it != roomList.end()) {
+        roomList.erase(it, roomList.end());
+        cout << GREEN << "Room deleted successfully." << RESET_COLOR << endl;
+    } else {
+        cout << RED << "Room not found." << RESET_COLOR << endl;
     }
 }
 
-void printTeachers() {
-    for (const auto &teacher : teacherList) {
-        teacher->printDetails();
-        cout << "\n---\n";
-    }
-}
-
-void printStudents() {
-    for (const auto &student : studentList) {
-        student->printDetails();
-        cout << "\n---\n";
-    }
-}
-
-void printRooms() {
+void displayRoom() {
+    cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
     for (const auto &room : roomList) {
-        cout << "\033[35mRoom Number:\033[0m " << room->getRoomNumber()
-             << "\n\033[35mCapacity:\033[0m " << room->getCapacity()
-             << "\n\033[35mIs Available:\033[0m " << room->getIsAvailable() << "\n---\n";
+        cout << BLUE << "Room Number: " << RESET_COLOR << room->getRoomNumber() << endl;
+        cout << BLUE << "Capacity: " << RESET_COLOR << room->getCapacity() << endl;
+        cout << BLUE << "Availability: " << RESET_COLOR << (room->getIsAvailable() ? "Available" : "Not Available") << endl;
+        cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
     }
 }
 
-void displayMenu() {
+void displayTimetable() {
+    cout << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    for (const auto &course : courseList) {
+        cout << BLUE << "Course Name: " << RESET_COLOR << course.getCourseName() << endl;
+        cout << BLUE << "Course Code: " << RESET_COLOR << course.getCourseCode() << endl;
+        cout << BLUE << "Day: " << RESET_COLOR << course.getCourseDay() << endl;
+        cout << BLUE << "Time: " << RESET_COLOR << course.getCourseTime() << endl;
+        cout << BLUE << "Teacher: " << RESET_COLOR << (course.getTeacher() ? course.getTeacher()->getName() : "N/A") << endl;
+        cout << BLUE << "Room: " << RESET_COLOR << (course.getRoom() ? course.getRoom()->getRoomNumber() : "N/A") << endl;
+        cout << BLUE << "Students: " << RESET_COLOR;
+        for (const auto &student : course.getStudents()) {
+            cout << student->getName() << " ";
+        }
+        cout << endl << YELLOW << "-----------------------------" << RESET_COLOR << endl;
+    }
+}
+
+void printMenu() {
+    int choice;
     cout << "\033[1;33m===========================\n";
     cout << "Timetable Management System\n";
     cout << "===========================\033[0m\n";
+    cout << MAGENTA << "1. Course Menu\n2. Teacher Menu\n3. Student Menu\n4. Room Menu\n5. Generate Timetable\n0. Exit\n" << RESET_COLOR;
+    cout << CYAN << "Enter your choice: " << RESET_COLOR;
+    cin >> choice;
 
-    // COURSE section
-    cout << "\033[33m1. Add Course\n";
-    cout << "2. Modify Course\n";
-    cout << "3. Remove Course\n";
-    cout << "------------------------------\n"; 
+    int subChoice;
+    switch (choice) {
+        case 1:
+            cout << BLUE << "1. Add Course\n2. Modify Course\n3. Delete Course\n4. Display Course\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            switch (subChoice) {
+                case 1:
+                    addCourse();
+                    break;
+                case 2:
+                    modifyCourse();
+                    break;
+                case 3:
+                    deleteCourse();
+                    break;
+                case 4:
+                    displayCourse();
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
+            break;
 
-    // TEACHER section
-    cout << "4. Add Teacher\n";
-    cout << "5. Modify Teacher\n";
-    cout << "6. Remove Teacher\n";
-    cout << "------------------------------\n"; 
-    // STUDENT section
-    cout << "7. Add Student\n";
-    cout << "8. Modify Student\n";
-    cout << "9. Remove Student\n";
-    cout << "------------------------------\n"; 
+        case 2:
+            cout << BLUE << "1. Add Teacher\n2. Modify Teacher\n3. Delete Teacher\n4. Display Teacher\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            switch (subChoice) {
+                case 1:
+                    addTeacher();
+                    break;
+                case 2:
+                    modifyTeacher();
+                    break;
+                case 3:
+                    deleteTeacher();
+                    break;
+                case 4:
+                    displayTeacher();
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
+            break;
 
-    // ROOM section
-    cout << "10. Add Room\n";
-    cout << "11. Modify Room\n";
-    cout << "12. Remove Room\n";
-    cout << "------------------------------\n"; 
+        case 3:
+            cout << BLUE << "1. Add Student\n2. Modify Student\n3. Delete Student\n4. Display Student\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            switch (subChoice) {
+                case 1:
+                    addStudent();
+                    break;
+                case 2:
+                    modifyStudent();
+                    break;
+                case 3:
+                    deleteStudent();
+                    break;
+                case 4:
+                    displayStudent();
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
+            break;
 
-    // PRINT section
-    cout << "13. Print All Courses\n";
-    cout << "14. Print All Teachers\n";
-    cout << "15. Print All Students\n";
-    cout << "16. Print All Rooms\n";
-    cout << "------------------------------\n"; 
+        case 4:
+            cout << BLUE << "1. Add Room\n2. Modify Room\n3. Delete Room\n4. Display Room\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            switch (subChoice) {
+                case 1:
+                    addRoom();
+                    break;
+                case 2:
+                    modifyRoom();
+                    break;
+                case 3:
+                    deleteRoom();
+                    break;
+                case 4:
+                    displayRoom();
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
+            break;
 
-    cout << "17. Exit\033[0m\n";
+        case 5:
+            displayTimetable();
+            break;
+
+        case 0:
+            exit(0);
+            break;
+
+        default:
+            cout << RED << "Invalid Choice\n" << RESET_COLOR;
+    }
 }
 
 int main() {
     while (true) {
-        displayMenu();
-        int choice;
-        cout << "\033[36mEnter your choice: \033[0m";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                addCourse();
-                break;
-            case 2:
-                modifyCourse();
-                break;
-            case 3:
-                removeCourse();
-                break;
-            case 4:
-                addTeacher();
-                break;
-            case 5:
-                modifyTeacher();
-                break;
-            case 6:
-                removeTeacher();
-                break;
-            case 7:
-                addStudent();
-                break;
-            case 8:
-                modifyStudent();
-                break;
-            case 9:
-                removeStudent();
-                break;
-            case 10:
-                addRoom();
-                break;
-            case 11:
-                modifyRoom();
-                break;
-            case 12:
-                removeRoom();
-                break;
-            case 13:
-                printCourses();
-                break;
-            case 14:
-                printTeachers();
-                break;
-            case 15:
-                printStudents();
-                break;
-            case 16:
-                printRooms();
-                break;
-            case 17:
-                return 0;
-            default:
-                cout << "\033[31mInvalid choice. Please try again.\033[0m\n";
-        }
+        printMenu();
+        cout << "\n";
     }
     return 0;
 }
