@@ -387,32 +387,31 @@ void displayMenu() {
     cout << "\033[33m1. Add Course\n";
     cout << "2. Modify Course\n";
     cout << "3. Remove Course\n";
-    cout << "------------------------------\n"; // Separator for course section
+    cout << "------------------------------\n"; 
 
     // TEACHER section
     cout << "4. Add Teacher\n";
     cout << "5. Modify Teacher\n";
     cout << "6. Remove Teacher\n";
-    cout << "------------------------------\n"; // Separator for teacher section
-
+    cout << "------------------------------\n"; 
     // STUDENT section
     cout << "7. Add Student\n";
     cout << "8. Modify Student\n";
     cout << "9. Remove Student\n";
-    cout << "------------------------------\n"; // Separator for student section
+    cout << "------------------------------\n"; 
 
     // ROOM section
     cout << "10. Add Room\n";
     cout << "11. Modify Room\n";
     cout << "12. Remove Room\n";
-    cout << "------------------------------\n"; // Separator for room section
+    cout << "------------------------------\n"; 
 
     // PRINT section
     cout << "13. Print All Courses\n";
     cout << "14. Print All Teachers\n";
     cout << "15. Print All Students\n";
     cout << "16. Print All Rooms\n";
-    cout << "------------------------------\n"; // Separator for print section
+    cout << "------------------------------\n"; 
 
     cout << "17. Exit\033[0m\n";
 }
