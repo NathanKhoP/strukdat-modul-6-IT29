@@ -52,6 +52,8 @@ public:
     void printDetails() const override {
         cout << "Teacher Name: " << name << "\n";
         cout << "Teacher ID: " << teacherID << "\n";
+        cout << "Teacher Email: " << email << "\n";
+        cout << "Teacher Phone: " << phone << "\n";
     }
 
     void setTeacherID(string teacherID) { this->teacherID = teacherID; }
@@ -68,6 +70,8 @@ public:
     void printDetails() const override {
         cout << "Student Name: " << name << "\n";
         cout << "Student ID: " << studentID << "\n";
+        cout << "Student Email: " << email << "\n";
+        cout << "Student Phone: " << phone << "\n";
     }
 
     void setStudentID(string studentID) { this->studentID = studentID; }
@@ -541,7 +545,7 @@ void importCoursesFromCSV(const string& filename) {
     }
 
     string line;
-    getline(file, line); // Skip header line
+    getline(file, line); 
 
     while (getline(file, line)) {
         stringstream ss(line);
@@ -590,6 +594,149 @@ void importCoursesFromCSV(const string& filename) {
     file.close();
     cout << GREEN << "Courses imported successfully from " << filename << RESET_COLOR << endl;
     logToFile("Courses imported from " + filename);
+}
+
+void exportStudentsToCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    file << "Student Name,Student Email,Student Phone,Student ID\n";
+    for (const auto& student : studentList) {
+        file << student->getName() << ","
+             << student->getEmail() << ","
+             << student->getPhone() << ","
+             << student->getStudentID() << "\n";
+    }
+
+    file.close();
+    cout << GREEN << "Students exported successfully to " << filename << RESET_COLOR << endl;
+    logToFile("Students exported to " + filename);
+}
+
+void importStudentsFromCSV(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    string line;
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string name, email, phone, studentID;
+
+        getline(ss, name, ',');
+        getline(ss, email, ',');
+        getline(ss, phone, ',');
+        getline(ss, studentID, ',');
+
+        studentList.push_back(new Student(name, email, phone, studentID));
+    }
+
+    file.close();
+    cout << GREEN << "Students imported successfully from " << filename << RESET_COLOR << endl;
+    logToFile("Students imported from " + filename);
+}
+
+void exportTeachersToCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    file << "Teacher Name,Teacher Email,Teacher Phone,Teacher ID\n";
+    for (const auto& teacher : teacherList) {
+        file << teacher->getName() << ","
+             << teacher->getEmail() << ","
+             << teacher->getPhone() << ","
+             << teacher->getTeacherID() << "\n";
+    }
+
+    file.close();
+    cout << GREEN << "Teachers exported successfully to " << filename << RESET_COLOR << endl;
+    logToFile("Teachers exported to " + filename);
+}
+
+void importTeachersFromCSV(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    string line;
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string name, email, phone, teacherID;
+
+        getline(ss, name, ',');
+        getline(ss, email, ',');
+        getline(ss, phone, ',');
+        getline(ss, teacherID, ',');
+
+        teacherList.push_back(new Teacher(name, email, phone, teacherID));
+    }
+
+    file.close();
+    cout << GREEN << "Teachers imported successfully from " << filename << RESET_COLOR << endl;
+    logToFile("Teachers imported from " + filename);
+}
+
+void exportRoomsToCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    file << "Room Number,Room Capacity,Room Availability\n";
+    for (const auto& room : roomList) {
+        file << room->getRoomNumber() << ","
+             << room->getCapacity() << ","
+             << (room->getIsAvailable() ? "Available" : "Not Available") << "\n";
+    }
+
+    file.close();
+    cout << GREEN << "Rooms exported successfully to " << filename << RESET_COLOR << endl;
+    logToFile("Rooms exported to " + filename);
+}
+
+void importRoomsFromCSV(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    string line;
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string roomNumber;
+        int capacity;
+        string availability;
+
+        getline(ss, roomNumber, ',');
+        getline(ss, availability, ',');
+        ss >> capacity;
+
+        bool isAvailable = (availability == "Available");
+
+        roomList.push_back(new Room(roomNumber, capacity, isAvailable));
+    }
+
+    file.close();
+    cout << GREEN << "Rooms imported successfully from " << filename << RESET_COLOR << endl;
+    logToFile("Rooms imported from " + filename);
 }
 
 void printMenu() {
@@ -697,15 +844,51 @@ void printMenu() {
             break;
 
         case 6:
-            cout << CYAN << "Enter filename to export courses: " << RESET_COLOR;
+            cout << BLUE << "1. Export Courses\n2. Export Students\n3. Export Teachers\n4. Export Rooms\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            cout << CYAN << "Enter filename: " << RESET_COLOR;
             cin >> exportFilename;
-            exportCoursesToCSV(exportFilename);
+            switch (subChoice) {
+                case 1:
+                    exportCoursesToCSV(exportFilename);
+                    break;
+                case 2:
+                    exportStudentsToCSV(exportFilename);
+                    break;
+                case 3:
+                    exportTeachersToCSV(exportFilename);
+                    break;
+                case 4:
+                    exportRoomsToCSV(exportFilename);
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
             break;
 
         case 7:
-            cout << CYAN << "Enter filename to import courses: " << RESET_COLOR;
+            cout << BLUE << "1. Import Courses\n2. Import Students\n3. Import Teachers\n4. Import Rooms\n" << RESET_COLOR;
+            cout << CYAN << "Enter your choice: " << RESET_COLOR;
+            cin >> subChoice;
+            cout << CYAN << "Enter filename: " << RESET_COLOR;
             cin >> importFilename;
-            importCoursesFromCSV(importFilename);
+            switch (subChoice) {
+                case 1:
+                    importCoursesFromCSV(importFilename);
+                    break;
+                case 2:
+                    importStudentsFromCSV(importFilename);
+                    break;
+                case 3:
+                    importTeachersFromCSV(importFilename);
+                    break;
+                case 4:
+                    importRoomsFromCSV(importFilename);
+                    break;
+                default:
+                    cout << RED << "Invalid Choice\n" << RESET_COLOR;
+            }
             break;
 
         case 0:
