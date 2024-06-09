@@ -124,7 +124,7 @@ vector<Room*> roomList;
 void addCourse() {
     string courseName, courseCode, courseDay, courseTime;
     cout << CYAN << "Enter Course Name: " << RESET_COLOR;
-    cin >> courseName;
+    getline(cin >> ws, courseName);
     cout << CYAN << "Enter Course Code: " << RESET_COLOR;
     cin >> courseCode;
     cout << CYAN << "Enter Course Day: " << RESET_COLOR;
@@ -180,7 +180,7 @@ void modifyCourse() {
         if (course.getCourseCode() == courseCode) {
             string courseName, courseDay, courseTime;
             cout << "Enter new Course Name: ";
-            cin >> courseName;
+            getline(cin >> ws, courseName);
             cout << "Enter new Course Day: ";
             cin >> courseDay;
             cout << "Enter new Course Time: ";
@@ -262,7 +262,7 @@ void displayCourse() {
 void addTeacher() {
     string name, email, phone, teacherID;
     cout << CYAN << "Enter Teacher Name: " << RESET_COLOR;
-    cin >> name;
+    getline(cin >> ws, name);
     cout << CYAN << "Enter Teacher Email: " << RESET_COLOR;
     cin >> email;
     cout << CYAN << "Enter Teacher Phone: " << RESET_COLOR;
@@ -281,7 +281,7 @@ void modifyTeacher() {
         if (teacher->getTeacherID() == teacherID) {
             string name, email, phone;
             cout << CYAN << "Enter new Teacher Name: " << RESET_COLOR;
-            cin >> name;
+            getline(cin >> ws, name);
             cout << CYAN << "Enter new Teacher Email: " << RESET_COLOR;
             cin >> email;
             cout << CYAN << "Enter new Teacher Phone: " << RESET_COLOR;
@@ -322,7 +322,7 @@ void displayTeacher() {
 void addStudent() {
     string name, email, phone, studentID;
     cout << CYAN << "Enter Student Name: " << RESET_COLOR;
-    cin >> name;
+    getline(cin >> ws, name);
     cout << CYAN << "Enter Student Email: " << RESET_COLOR;
     cin >> email;
     cout << CYAN << "Enter Student Phone: " << RESET_COLOR;
@@ -341,7 +341,7 @@ void modifyStudent() {
         if (student->getStudentID() == studentID) {
             string name, email, phone;
             cout << CYAN << "Enter new Student Name: " << RESET_COLOR;
-            cin >> name;
+            getline(cin >> ws, name);
             cout << CYAN << "Enter new Student Email: " << RESET_COLOR;
             cin >> email;
             cout << CYAN << "Enter new Student Phone: " << RESET_COLOR;
