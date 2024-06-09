@@ -501,12 +501,104 @@ void displayTimetable() {
     }
 }
 
+void exportCoursesToCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    file << "Course Name,Course Code,Course Day,Course Time,Teacher ID,Student IDs,Room Number\n";
+    for (const auto& course : courseList) {
+        file << course.getCourseName() << ","
+             << course.getCourseCode() << ","
+             << course.getCourseDay() << ","
+             << course.getCourseTime() << ","
+             << (course.getTeacher() ? course.getTeacher()->getTeacherID() : "N/A") << ",";
+
+        bool isFirst = true;
+        for (const auto& student : course.getStudents()) {
+            if (!isFirst) {
+                file << "|";
+            }
+            file << student->getStudentID();
+            isFirst = false;
+        }
+
+        file << "," << (course.getRoom() ? course.getRoom()->getRoomNumber() : "N/A") << "\n";
+    }
+
+    file.close();
+    cout << GREEN << "Courses exported successfully to " << filename << RESET_COLOR << endl;
+    logToFile("Courses exported to " + filename);
+}
+
+void importCoursesFromCSV(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << RED << "Failed to open file: " << filename << RESET_COLOR << endl;
+        return;
+    }
+
+    string line;
+    getline(file, line); // Skip header line
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string courseName, courseCode, courseDay, courseTime, teacherID, studentIDs, roomNumber;
+
+        getline(ss, courseName, ',');
+        getline(ss, courseCode, ',');
+        getline(ss, courseDay, ',');
+        getline(ss, courseTime, ',');
+        getline(ss, teacherID, ',');
+        getline(ss, studentIDs, ',');
+        getline(ss, roomNumber, ',');
+
+        Teacher* teacher = nullptr;
+        for (const auto& t : teacherList) {
+            if (t->getTeacherID() == teacherID) {
+                teacher = t;
+                break;
+            }
+        }
+
+        vector<Student*> students;
+        stringstream studentIDsStream(studentIDs);
+        string studentID;
+        while (getline(studentIDsStream, studentID, '|')) {
+            for (const auto& s : studentList) {
+                if (s->getStudentID() == studentID) {
+                    students.push_back(s);
+                    break;
+                }
+            }
+        }
+
+        Room* room = nullptr;
+        for (const auto& r : roomList) {
+            if (r->getRoomNumber() == roomNumber) {
+                room = r;
+                break;
+            }
+        }
+
+        courseList.push_back(Course(courseName, courseCode, courseDay, courseTime, teacher, students, room));
+        courseList.back().setNumStudents(students.size());
+    }
+
+    file.close();
+    cout << GREEN << "Courses imported successfully from " << filename << RESET_COLOR << endl;
+    logToFile("Courses imported from " + filename);
+}
+
 void printMenu() {
     int choice;
+    string exportFilename, importFilename;
     cout << "\033[1;33m===========================\n";
     cout << "Timetable Management System\n";
     cout << "===========================\033[0m\n";
-    cout << MAGENTA << "1. Course Menu\n2. Teacher Menu\n3. Student Menu\n4. Room Menu\n5. Generate Timetable\n0. Exit\n" << RESET_COLOR;
+    cout << MAGENTA << "1. Course Menu\n2. Teacher Menu\n3. Student Menu\n4. Room Menu\n5. Generate Timetable\n6. Export File...\n7. Import File...\n0. Exit\n" << RESET_COLOR;
     cout << CYAN << "Enter your choice: " << RESET_COLOR;
     cin >> choice;
 
@@ -602,6 +694,18 @@ void printMenu() {
 
         case 5:
             displayTimetable();
+            break;
+
+        case 6:
+            cout << CYAN << "Enter filename to export courses: " << RESET_COLOR;
+            cin >> exportFilename;
+            exportCoursesToCSV(exportFilename);
+            break;
+
+        case 7:
+            cout << CYAN << "Enter filename to import courses: " << RESET_COLOR;
+            cin >> importFilename;
+            importCoursesFromCSV(importFilename);
             break;
 
         case 0:
