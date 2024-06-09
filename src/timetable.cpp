@@ -14,6 +14,15 @@ class Teacher;
 class Student;
 class Room;    
 
+void logToFile(const string& message) {
+    time_t currentTime = time(nullptr);
+    struct tm* localTime = localtime(&currentTime);
+    ofstream logFile("logs.log", ios::app);
+
+    logFile << "[" << put_time(localTime, "%Y-%m-%d %H:%M:%S") << "] " << message << endl;
+    logFile.close();
+}
+
 class Person {
 protected:
     string name;
@@ -177,6 +186,7 @@ void addCourse() {
     courseList.push_back(Course(courseName, courseCode, courseDay, courseTime, teacher, students, room));
     courseList.back().setNumStudents(students.size());
     cout << GREEN << "Course added successfully." << RESET_COLOR << endl;
+    logToFile("Course added: " + courseCode);
 
 }
 
@@ -242,10 +252,12 @@ void modifyCourse() {
             room->setIsAvailable(false);
 
             cout << GREEN << "Course modified successfully." << RESET_COLOR << endl;
+            logToFile("Course modified: " + courseCode);
             return;
         }
     }
     cout << RED << "Course not found." << RESET_COLOR << endl;
+    logToFile("Course modification failed: " + courseCode);
 }
 
 void deleteCourse() {
@@ -258,8 +270,10 @@ void deleteCourse() {
     if (it != courseList.end()) {
         courseList.erase(it, courseList.end());
         cout << GREEN << "Course deleted successfully." << RESET_COLOR << endl;
+        logToFile("Course deleted: " + courseCode);
     } else {
         cout << RED << "Course not found." << RESET_COLOR << endl;
+        logToFile("Course deletion failed: " + courseCode);
     }
 }
 
@@ -286,6 +300,7 @@ void addTeacher() {
     cin >> teacherID;
     teacherList.push_back(new Teacher(name, email, phone, teacherID));
     cout << GREEN << "Teacher added successfully." << RESET_COLOR << endl;
+    logToFile("Teacher added: " + teacherID);
 }
 
 void modifyTeacher() {
@@ -305,10 +320,12 @@ void modifyTeacher() {
             teacher->setEmail(email);
             teacher->setPhone(phone);
             cout << GREEN << "Teacher modified successfully." << RESET_COLOR << endl;
+            logToFile("Teacher modified: " + teacherID);
             return;
         }
     }
     cout << RED << "Teacher not found." << RESET_COLOR << endl;
+    logToFile("Teacher modification failed: " + teacherID);
 }
 
 void deleteTeacher() {
@@ -320,8 +337,10 @@ void deleteTeacher() {
     if (it != teacherList.end()) {
         teacherList.erase(it, teacherList.end());
         cout << GREEN << "Teacher deleted successfully." << RESET_COLOR << endl;
+        logToFile("Teacher deleted: " + teacherID);
     } else {
         cout << RED << "Teacher not found." << RESET_COLOR << endl;
+        logToFile("Teacher deletion failed: " + teacherID);
     }
 }
 
@@ -346,6 +365,7 @@ void addStudent() {
     cin >> studentID;
     studentList.push_back(new Student(name, email, phone, studentID));
     cout << GREEN << "Student added successfully." << RESET_COLOR << endl;
+    logToFile("Student added: " + studentID);
 }
 
 void modifyStudent() {
@@ -365,10 +385,12 @@ void modifyStudent() {
             student->setEmail(email);
             student->setPhone(phone);
             cout << GREEN << "Student modified successfully." << RESET_COLOR << endl;
+            logToFile("Student modified: " + studentID);
             return;
         }
     }
     cout << RED << "Student not found." << RESET_COLOR << endl;
+    logToFile("Student modification failed: " + studentID);
 }
 
 void deleteStudent() {
@@ -380,8 +402,10 @@ void deleteStudent() {
     if (it != studentList.end()) {
         studentList.erase(it, studentList.end());
         cout << GREEN << "Student deleted successfully." << RESET_COLOR << endl;
+        logToFile("Student deleted: " + studentID);
     } else {
         cout << RED << "Student not found." << RESET_COLOR << endl;
+        logToFile("Student deletion failed: " + studentID);
     }
 }
 
@@ -407,6 +431,7 @@ void addRoom() {
     cin >> isAvailable;
     roomList.push_back(new Room(roomNumber, capacity, isAvailable));
     cout << GREEN << "Room added successfully." << RESET_COLOR << endl;
+    logToFile("Room added: " + roomNumber);
 }
 
 void modifyRoom() {
@@ -424,10 +449,12 @@ void modifyRoom() {
             room->setCapacity(capacity);
             room->setIsAvailable(isAvailable);
             cout << GREEN << "Room modified successfully." << RESET_COLOR << endl;
+            logToFile("Room modified: " + roomNumber);
             return;
         }
     }
     cout << RED << "Room not found." << RESET_COLOR << endl;
+    logToFile("Room modification failed: " + roomNumber);
 }
 
 void deleteRoom() {
@@ -439,8 +466,10 @@ void deleteRoom() {
     if (it != roomList.end()) {
         roomList.erase(it, roomList.end());
         cout << GREEN << "Room deleted successfully." << RESET_COLOR << endl;
+        logToFile("Room deleted: " + roomNumber);
     } else {
         cout << RED << "Room not found." << RESET_COLOR << endl;
+        logToFile("Room deletion failed: " + roomNumber);
     }
 }
 
