@@ -869,6 +869,7 @@ void printMenu() {
 
         case 7:
             cout << BLUE << "1. Import Courses\n2. Import Students\n3. Import Teachers\n4. Import Rooms\n" << RESET_COLOR;
+            cout << RED << "Disclaimer: Due to how this program works, please input courses last when importing files.\n" << RESET_COLOR;
             cout << CYAN << "Enter your choice: " << RESET_COLOR;
             cin >> subChoice;
             cout << CYAN << "Enter filename: " << RESET_COLOR;
