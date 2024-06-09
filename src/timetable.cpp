@@ -284,7 +284,7 @@ void addRoom() {
     cin >> roomNumber;
     cout << "\033[36mEnter Room Capacity:\033[0m ";
     cin >> capacity;
-    cout << "\033[36mIs the Room Available? (1 for Yes, 0 for No):\033[0m ";
+    cout << "\033[36mIs Room Available (1 for Yes, 0 for No):\033[0m ";
     cin >> isAvailable;
 
     roomList.push_back(new Room(roomNumber, capacity, isAvailable));
@@ -301,7 +301,7 @@ void modifyRoom() {
             bool isAvailable;
             cout << "\033[36mEnter new Room Capacity:\033[0m ";
             cin >> capacity;
-            cout << "\033[36mIs the Room Available? (1 for Yes, 0 for No):\033[0m ";
+            cout << "\033[36mIs Room Available (1 for Yes, 0 for No):\033[0m ";
             cin >> isAvailable;
             room->setCapacity(capacity);
             room->setIsAvailable(isAvailable);
@@ -326,63 +326,53 @@ void removeRoom() {
     cout << "\033[31mRoom not found.\033[0m\n";
 }
 
-void printAllCourses() {
-    if (courseList.empty()) {
-        cout << "\033[31mNo courses found.\033[0m\n";
-    } else {
-        for (const auto &course : courseList) {
-            cout << "\033[34mCourse Name:\033[0m " << course.getCourseName() << "\n\033[34mCourse Code:\033[0m " << course.getCourseCode() << "\n\033[34mCourse Day:\033[0m " << course.getCourseDay() << "\n\033[34mCourse Time:\033[0m " << course.getCourseTime() << endl;
-            if (course.getTeacher() != nullptr) {
-                cout << "\033[34mTeacher:\033[0m " << course.getTeacher()->getTeacherID() << " - " << course.getTeacher()->name << endl;
-            }
-            if (course.getRoom() != nullptr) {
-                cout << "\033[34mRoom:\033[0m " << course.getRoom()->getRoomNumber() << " (Capacity: " << course.getRoom()->getCapacity() << ", Available: " << (course.getRoom()->getIsAvailable() ? "Yes" : "No") << ")\n";
-            }
-            if (!course.getStudents().empty()) {
-                cout << "\033[34mStudents:\033[0m\n";
-                for (const auto &student : course.getStudents()) {
-                    cout << student->getStudentID() << " - " << student->name << endl;
-                }
-            }
-            cout << "------------------------------\n";
+void printCourses() {
+    for (const auto &course : courseList) {
+        cout << "\033[35mCourse Name:\033[0m " << course.getCourseName()
+             << "\n\033[35mCourse Code:\033[0m " << course.getCourseCode()
+             << "\n\033[35mCourse Day:\033[0m " << course.getCourseDay()
+             << "\n\033[35mCourse Time:\033[0m " << course.getCourseTime() << endl;
+        if (course.getTeacher() != nullptr) {
+            cout << "\033[35mTeacher:\033[0m " << course.getTeacher()->getTeacherID() << endl;
         }
+        if (course.getRoom() != nullptr) {
+            cout << "\033[35mRoom:\033[0m " << course.getRoom()->getRoomNumber() << endl;
+        }
+        cout << "\033[35mStudents:\033[0m ";
+        for (const auto &student : course.getStudents()) {
+            cout << student->getStudentID() << " ";
+        }
+        cout << "\n---\n";
     }
 }
 
-void printAllTeachers() {
-    if (teacherList.empty()) {
-        cout << "\033[31mNo teachers found.\033[0m\n";
-    } else {
-        for (const auto &teacher : teacherList) {
-            teacher->printDetails();
-            cout << "------------------------------\n";
-        }
+void printTeachers() {
+    for (const auto &teacher : teacherList) {
+        teacher->printDetails();
+        cout << "\n---\n";
     }
 }
 
-void printAllStudents() {
-    if (studentList.empty()) {
-        cout << "\033[31mNo students found.\033[0m\n";
-    } else {
-        for (const auto &student : studentList) {
-            student->printDetails();
-            cout << "------------------------------\n";
-        }
+void printStudents() {
+    for (const auto &student : studentList) {
+        student->printDetails();
+        cout << "\n---\n";
     }
 }
 
-void printAllRooms() {
-    if (roomList.empty()) {
-        cout << "\033[31mNo rooms found.\033[0m\n";
-    } else {
-        for (const auto &room : roomList) {
-            cout << "\033[34mRoom Number:\033[0m " << room->getRoomNumber() << "\n\033[34mCapacity:\033[0m " << room->getCapacity() << "\n\033[34mAvailable:\033[0m " << (room->getIsAvailable() ? "Yes" : "No") << endl;
-            cout << "------------------------------\n";
-        }
+void printRooms() {
+    for (const auto &room : roomList) {
+        cout << "\033[35mRoom Number:\033[0m " << room->getRoomNumber()
+             << "\n\033[35mCapacity:\033[0m " << room->getCapacity()
+             << "\n\033[35mIs Available:\033[0m " << room->getIsAvailable() << "\n---\n";
     }
 }
 
 void displayMenu() {
+    cout << "\033[1;33m===========================\n";
+    cout << "Timetable Management System\n";
+    cout << "===========================\033[0m\n";
+
     // COURSE section
     cout << "\033[33m1. Add Course\n";
     cout << "2. Modify Course\n";
@@ -417,11 +407,12 @@ void displayMenu() {
 }
 
 int main() {
-    int choice;
-    do {
+    while (true) {
         displayMenu();
-        cout << "\033[36mEnter your choice:\033[0m ";
+        int choice;
+        cout << "\033[36mEnter your choice: \033[0m";
         cin >> choice;
+
         switch (choice) {
             case 1:
                 addCourse();
@@ -460,25 +451,22 @@ int main() {
                 removeRoom();
                 break;
             case 13:
-                printAllCourses();
+                printCourses();
                 break;
             case 14:
-                printAllTeachers();
+                printTeachers();
                 break;
             case 15:
-                printAllStudents();
+                printStudents();
                 break;
             case 16:
-                printAllRooms();
+                printRooms();
                 break;
             case 17:
-                cout << "\033[32mExiting the program.\033[0m\n";
-                break;
+                return 0;
             default:
                 cout << "\033[31mInvalid choice. Please try again.\033[0m\n";
-                break;
         }
-    } while (choice != 17);
-
+    }
     return 0;
 }
