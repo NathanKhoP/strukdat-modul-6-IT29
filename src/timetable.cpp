@@ -94,6 +94,7 @@ private:
     Teacher* teacher;
     vector<Student*> students;
     Room* room;
+    int numStudents = 0;
 public:
     Course(string courseName, string courseCode, string courseDay, string courseTime, Teacher* teacher, vector<Student*> students, Room* room)
         : courseName(courseName), courseCode(courseCode), courseDay(courseDay), courseTime(courseTime), teacher(teacher), students(students), room(room) {}
@@ -114,6 +115,9 @@ public:
     const Teacher* getTeacher() const { return teacher; }
     const vector<Student*>& getStudents() const { return students; }
     const Room* getRoom() const { return room; }
+
+    int getNumStudents() const { return numStudents; }
+    void setNumStudents(int numStudents) { this->numStudents = numStudents; }
 };
 
 vector<Course> courseList;
@@ -162,11 +166,16 @@ void addCourse() {
     for (auto &r : roomList) {
         if (r->getRoomNumber() == roomNumber) {
             room = r;
+            if (!room->getIsAvailable()) {
+                cout << RED << "Room is not available." << RESET_COLOR << endl;
+                return;
+            }
             break;
         }
     }
 
     courseList.push_back(Course(courseName, courseCode, courseDay, courseTime, teacher, students, room));
+    courseList.back().setNumStudents(students.size());
     cout << GREEN << "Course added successfully." << RESET_COLOR << endl;
 
 }
@@ -213,6 +222,7 @@ void modifyCourse() {
                 }
             }
             course.setStudents(students);
+            course.setNumStudents(students.size());
 
             string roomNumber;
             cout << "Enter new Room Number: ";
@@ -225,6 +235,11 @@ void modifyCourse() {
                 }
             }
             course.setRoom(room);
+
+            if (course.getRoom() != room) {
+                room->setIsAvailable(true);
+            }
+            room->setIsAvailable(false);
 
             cout << GREEN << "Course modified successfully." << RESET_COLOR << endl;
             return;
@@ -448,6 +463,7 @@ void displayTimetable() {
         cout << BLUE << "Time: " << RESET_COLOR << course.getCourseTime() << endl;
         cout << BLUE << "Teacher: " << RESET_COLOR << (course.getTeacher() ? course.getTeacher()->getName() : "N/A") << endl;
         cout << BLUE << "Room: " << RESET_COLOR << (course.getRoom() ? course.getRoom()->getRoomNumber() : "N/A") << endl;
+        cout << BLUE << "Students Enrolled: " << RESET_COLOR << course.getNumStudents() << endl;
         cout << BLUE << "Students: " << RESET_COLOR;
         for (const auto &student : course.getStudents()) {
             cout << student->getName() << " ";
