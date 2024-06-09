@@ -43,9 +43,3 @@ Sistem Manajemen Jadwal sederhana yang ditulis dalam bahasa C++ untuk mengelola 
   - Cetak Semua Guru
   - Cetak Semua Murid
   - Cetak Semua Ruangan
-
-## Cara Menggunakan
-
-1. Clone repositori ini.
-   ```
-   https://github.com/NathanKhoP/strukdat-modul-6-IT29.git
