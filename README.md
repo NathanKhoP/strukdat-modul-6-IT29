@@ -47,5 +47,5 @@ Sistem Manajemen Jadwal sederhana yang ditulis dalam bahasa C++ untuk mengelola 
 ## Cara Menggunakan
 
 1. Clone repositori ini.
-   ```sh
-   git clone https://github.com/username/timetable-management.git
+   ```
+   https://github.com/NathanKhoP/strukdat-modul-6-IT29.git
